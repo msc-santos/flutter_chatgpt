@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/models/chat_message.dart';
 
 class Message extends StatelessWidget {
-  static const _defaultImage = 'assets/images/avatar.png';
   final ChatMessage message;
   final bool userOrChatGpt;
 
@@ -15,7 +14,7 @@ class Message extends StatelessWidget {
   Widget _showUserImage(String imageUrl) {
     ImageProvider? provider;
 
-    provider = const AssetImage(_defaultImage);
+    provider = AssetImage(imageUrl);
 
     return CircleAvatar(
       backgroundImage: provider,

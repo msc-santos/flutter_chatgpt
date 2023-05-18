@@ -5,6 +5,7 @@ import 'package:flutter_chatgpt/models/chat_user.dart';
 
 abstract class AuthService {
   ChatUser? get currentUser;
+  ChatUser? get currentBot;
 
   Stream<ChatUser?> get userChanges;
 

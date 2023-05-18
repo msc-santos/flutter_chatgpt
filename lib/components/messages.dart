@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/interfaces/chat_interface.dart';
 import 'package:flutter_chatgpt/models/chat_message.dart';
 import 'package:flutter_chatgpt/components/message.dart';
+import 'package:flutter_chatgpt/services/auth_service.dart';
 
 class Messages extends StatelessWidget {
   const Messages({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = AuthService().currentUser;
     return StreamBuilder<List<ChatMessage>>(
       stream: ChatService().messagesStream(),
       builder: (ctx, snapshot) {
@@ -25,7 +27,7 @@ class Messages extends StatelessWidget {
             itemBuilder: (ctx, i) => Message(
               key: ValueKey(msgs[i].id),
               message: msgs[i],
-              userOrChatGpt: true,
+              userOrChatGpt: currentUser?.id == msgs[i].userId,
             ),
           );
         }

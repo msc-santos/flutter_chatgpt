@@ -12,11 +12,19 @@ class AuthMockService implements AuthService {
     imageUrl: 'assets/images/avatar.png',
   );
 
+  static const _defaultBot = ChatUser(
+    id: '456',
+    name: 'Chat Gpt',
+    email: 'chat@teste.com.br',
+    imageUrl: 'assets/images/avatar_chat.png',
+  );
+
   static final Map<String, ChatUser> _users = {
     _defaultUser.email: _defaultUser,
   };
 
   static ChatUser? _currentUser;
+  static ChatUser? _currentBot;
 
   static MultiStreamController<ChatUser?>? _controller;
 
@@ -29,6 +37,12 @@ class AuthMockService implements AuthService {
   ChatUser? get currentUser {
     _currentUser = _defaultUser;
     return _currentUser;
+  }
+
+  @override
+  ChatUser? get currentBot {
+    _currentBot = _defaultBot;
+    return _currentBot;
   }
 
   @override
