@@ -14,6 +14,16 @@
                 "env.local.json"
             ]
         },
+        {
+            "name": "Web Chrome",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "chrome",
+            "args": [
+                "--dart-define-from-file",
+                "env.local.json"
+            ]
+        },
     ],
     "compounds": [
         {
