@@ -14,7 +14,7 @@ class _NewMessageState extends State<NewMessage> {
   String _message = '';
   final _messageController = TextEditingController();
 
-  Future<void> _sendMessage() async {
+  Future<void> _sendMessage(context) async {
     final user = AuthService().currentUser;
 
     if (user != null) {
@@ -22,7 +22,7 @@ class _NewMessageState extends State<NewMessage> {
       _messageController.clear();
 
       ChatGptService chatGptService = ChatGptService();
-      chatGptService.callWithChatGpt(_message);
+      chatGptService.callWithChatGpt(_message, context);
     }
   }
 
@@ -41,14 +41,15 @@ class _NewMessageState extends State<NewMessage> {
               ),
               onSubmitted: (_) {
                 if (_message.trim().isNotEmpty) {
-                  _sendMessage();
+                  _sendMessage(context);
                 }
               },
             ),
           ),
           IconButton(
             icon: const Icon(Icons.send),
-            onPressed: _message.trim().isEmpty ? null : _sendMessage,
+            onPressed: () =>
+                _message.trim().isEmpty ? null : _sendMessage(context),
           ),
         ],
       ),

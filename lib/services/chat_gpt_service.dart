@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/common/constants.dart';
 import 'package:flutter_chatgpt/interfaces/chat_interface.dart';
 import 'package:flutter_chatgpt/models/chat_message.dart';
 import 'package:flutter_chatgpt/models/chat_user.dart';
 import 'package:chat_gpt_flutter/chat_gpt_flutter.dart';
 import 'package:flutter_chatgpt/services/auth_service.dart';
+import 'package:flutter_chatgpt/states/loading_app.dart';
+import 'package:provider/provider.dart';
 
 class ChatGptService implements ChatService {
   static final List<ChatMessage> _msgs = [];
@@ -17,45 +20,46 @@ class ChatGptService implements ChatService {
   });
 
   @override
-  Future<void> callWithChatGpt(String question) async {
+  Future<void> callWithChatGpt(String question, BuildContext context) async {
     if (question.isEmpty) return;
+
+    final LoadingAppState loadingAppState = Provider.of(context, listen: false);
+    loadingAppState.setLoading(true);
 
     final chatGptBot = AuthService().currentBot;
     await ChatService().send('...', chatGptBot!);
 
-    final chatGpt = ChatGpt(apiKey: apiKey);
+    // final chatGpt = ChatGpt(apiKey: apiKey);
 
-    final request = CompletionRequest(
-      stream: true,
-      maxTokens: 4000,
-      model: ChatGptModel.gpt35Turbo,
-      messages: [
-        Message(
-          role: Role.user.name,
-          content: question,
-        ),
-      ],
-    );
+    // final request = CompletionRequest(
+    //   stream: true,
+    //   maxTokens: 4000,
+    //   model: ChatGptModel.gpt35Turbo,
+    //   messages: [
+    //     Message(
+    //       role: Role.user.name,
+    //       content: question,
+    //     ),
+    //   ],
+    // );
 
-    final stream = await chatGpt.createChatCompletionStream(request);
+    // final stream = await chatGpt.createChatCompletionStream(request);
 
-    if (stream == null) return;
+    // if (stream == null) return;
 
-    final completer = Completer();
-    final buffer = StringBuffer();
+    // final completer = Completer();
+    // final buffer = StringBuffer();
 
-    final streamSubscription = stream.listen((event) async {
-      if (event.streamMessageEnd) completer.complete();
+    // final streamSubscription = stream.listen((event) async {
+    //   if (event.streamMessageEnd) completer.complete();
 
-      final bufferMessage = event.choices?.first.delta?.content ?? '';
-      buffer.write(bufferMessage);
-    });
+    //   final bufferMessage = event.choices?.first.delta?.content ?? '';
+    //   buffer.write(bufferMessage);
+    //   await ChatService().send(buffer.toString(), chatGptBot);
+    // });
 
-    await completer.future;
-    await streamSubscription.cancel();
-
-    // TODO: esse retorno deve ser semelhante a uma conversa, não retornar tudo de uma vez, mas ficar digitando em mostrando em tela, igual acontece no site
-    await ChatService().send(buffer.toString(), chatGptBot);
+    // await completer.future;
+    // await streamSubscription.cancel();
   }
 
   @override
