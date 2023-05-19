@@ -6,7 +6,7 @@ import 'package:flutter_chatgpt/services/chat_gpt_service.dart';
 abstract class ChatService {
   Stream<List<ChatMessage>> messagesStream();
   Future<void> callWithChatGpt(String question, BuildContext context);
-  Future<ChatMessage?> send(String texto, ChatUser user);
+  Future<ChatMessage?> send(String text, ChatUser user);
 
   factory ChatService() {
     return ChatGptService();

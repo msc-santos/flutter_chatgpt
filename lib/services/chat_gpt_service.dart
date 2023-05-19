@@ -27,39 +27,43 @@ class ChatGptService implements ChatService {
     loadingAppState.setLoading(true);
 
     final chatGptBot = AuthService().currentBot;
-    await ChatService().send('...', chatGptBot!);
 
-    // final chatGpt = ChatGpt(apiKey: apiKey);
+    final chatGpt = ChatGpt(apiKey: apiKey);
 
-    // final request = CompletionRequest(
-    //   stream: true,
-    //   maxTokens: 4000,
-    //   model: ChatGptModel.gpt35Turbo,
-    //   messages: [
-    //     Message(
-    //       role: Role.user.name,
-    //       content: question,
-    //     ),
-    //   ],
-    // );
+    final request = CompletionRequest(
+      stream: true,
+      maxTokens: 4000,
+      model: ChatGptModel.gpt35Turbo,
+      messages: [
+        Message(
+          role: Role.user.name,
+          content: question,
+        ),
+      ],
+    );
 
-    // final stream = await chatGpt.createChatCompletionStream(request);
+    final stream = await chatGpt.createChatCompletionStream(request);
 
-    // if (stream == null) return;
+    if (stream == null) {
+      loadingAppState.setLoading(false);
+      return;
+    }
 
-    // final completer = Completer();
-    // final buffer = StringBuffer();
+    final completer = Completer();
+    final buffer = StringBuffer();
 
-    // final streamSubscription = stream.listen((event) async {
-    //   if (event.streamMessageEnd) completer.complete();
+    final streamSubscription = stream.listen((event) async {
+      if (event.streamMessageEnd) completer.complete();
 
-    //   final bufferMessage = event.choices?.first.delta?.content ?? '';
-    //   buffer.write(bufferMessage);
-    //   await ChatService().send(buffer.toString(), chatGptBot);
-    // });
+      final bufferMessage = event.choices?.first.delta?.content ?? '';
+      buffer.write(bufferMessage);
+    });
 
-    // await completer.future;
-    // await streamSubscription.cancel();
+    await completer.future;
+    await streamSubscription.cancel();
+
+    loadingAppState.setLoading(false);
+    await ChatService().send(buffer.toString(), chatGptBot!);
   }
 
   @override
