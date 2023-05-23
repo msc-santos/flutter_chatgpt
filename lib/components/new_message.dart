@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/interfaces/chat_interface.dart';
 import 'package:flutter_chatgpt/services/auth_service.dart';
-import 'package:flutter_chatgpt/services/chat_gpt_service.dart';
 
 class NewMessage extends StatefulWidget {
   const NewMessage({super.key});
@@ -16,13 +15,13 @@ class _NewMessageState extends State<NewMessage> {
 
   Future<void> _sendMessage(context) async {
     final user = AuthService().currentUser;
+    ChatService chatService = ChatService();
 
     if (user != null) {
-      await ChatService().send(_message, user);
+      await chatService.send(_message, user);
       _messageController.clear();
 
-      ChatGptService chatGptService = ChatGptService();
-      chatGptService.callWithChatGpt(_message, context);
+      chatService.callWithChatGpt(_message, context);
     }
   }
 
