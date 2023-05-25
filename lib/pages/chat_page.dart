@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/components/messages.dart';
 import 'package:flutter_chatgpt/components/new_message.dart';
+import 'package:flutter_chatgpt/routes/app_routes.dart';
 import 'package:flutter_chatgpt/states/loading_app.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,6 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         title: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               'Flutter Chat GPT',
@@ -46,6 +46,16 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           ],
         ),
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        actions: <Widget>[
+          IconButton(
+            padding: const EdgeInsets.only(right: 16.0),
+            color: Theme.of(context).colorScheme.background,
+            iconSize: 26.0,
+            icon: const Icon(Icons.arrow_forward),
+            onPressed: () =>
+                Navigator.of(context).pushNamed(AppRoutes.tensorflow),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(

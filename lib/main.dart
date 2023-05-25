@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/pages/chat_page.dart';
+import 'package:flutter_chatgpt/pages/tensorflow_page.dart';
 import 'package:flutter_chatgpt/states/loading_app.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_chatgpt/routes/app_routes.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
@@ -28,7 +30,10 @@ class MyApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
-        home: const ChatPage(),
+        routes: {
+          AppRoutes.home: (ctx) => const ChatPage(),
+          AppRoutes.tensorflow: (ctx) => const TensorflowPage(),
+        },
       ),
     );
   }
